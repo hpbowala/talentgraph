@@ -1,0 +1,44 @@
+PRIYA RAJ
+Data Scientist
+Email: priya.raj@example.com | Location: Colombo, Sri Lanka
+
+PROFESSIONAL SUMMARY
+Data Scientist with 6 years of experience delivering machine learning solutions
+from research to production. Specialised in Natural Language Processing and
+predictive modelling, with hands-on AWS deployment experience.
+
+SKILLS
+- Python
+- Machine Learning
+- Natural Language Processing
+- Statistical modelling
+- AWS
+- Data storytelling
+
+TECHNOLOGIES
+TensorFlow, Pandas, scikit-learn, SQL, Jupyter, Docker, Git
+
+WORK EXPERIENCE
+
+Senior Data Scientist — Nexlify Solutions (2022 – Present)
+- Model owner on the Customer Support AI project: trained and evaluated the intent
+  classification and response-quality models using TensorFlow and Python.
+- Deployed model endpoints to AWS and monitored drift in production.
+
+Data Scientist — InsightWorks (2019 – 2022)
+- Built the Churn Prediction Model for a telecom operator, improving retention
+  campaign targeting by 30% using scikit-learn and SQL feature pipelines.
+- Ran NLP analysis of customer feedback to surface product pain points.
+
+PROJECTS
+- Customer Support AI: LLM-based support assistant — model training and evaluation.
+  Python, TensorFlow, AWS.
+- Churn Prediction Model: telecom customer churn predictor. Python, scikit-learn,
+  SQL.
+
+EDUCATION
+- MSc in Data Science, University of Colombo (2019)
+- BSc in Statistics, University of Jaffna (2016)
+
+DOMAINS
+Artificial Intelligence, Data Science

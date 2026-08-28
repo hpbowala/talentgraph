@@ -1,0 +1,42 @@
+DAVID SILVA
+Backend Engineer
+Email: david.silva@example.com | Location: Kandy, Sri Lanka
+
+PROFESSIONAL SUMMARY
+Backend Engineer with 6 years of experience designing high-throughput APIs and
+distributed systems. Strong background in Python services on AWS with an interest
+in applied machine learning.
+
+SKILLS
+- Python
+- AWS
+- API design
+- Database design
+- Microservices architecture
+- Basic Machine Learning (online courses, side projects)
+
+TECHNOLOGIES
+FastAPI, PostgreSQL, Redis, Docker, RabbitMQ, Git
+
+WORK EXPERIENCE
+
+Backend Engineer — FinEdge Systems (2020 – Present)
+- Core developer on the Payment Gateway Platform processing 2M transactions/day,
+  built with Python, FastAPI and PostgreSQL on AWS.
+- Introduced Redis-based caching that cut median API latency by 45%.
+- Containerised all services with Docker and automated deployments.
+
+Software Engineer — Lanka Retail Tech (2018 – 2020)
+- Built and maintained the Inventory Management System backend in Python.
+- Designed relational schemas and reporting queries in PostgreSQL.
+
+PROJECTS
+- Payment Gateway Platform: high-volume payments backend. Python, FastAPI,
+  PostgreSQL, Redis, AWS.
+- Inventory Management System: retail stock management backend. Python, PostgreSQL.
+
+EDUCATION
+- BSc in Software Engineering, Sri Lanka Institute of Information Technology (2017)
+
+DOMAINS
+Backend Development, Financial Technology

@@ -1,0 +1,47 @@
+ALICE PERERA
+Senior AI Engineer
+Email: alice.perera@example.com | Location: Colombo, Sri Lanka
+
+PROFESSIONAL SUMMARY
+Senior AI Engineer with 7 years of experience building production machine learning
+systems. Specialises in Natural Language Processing and cloud-native AI services on
+Amazon Web Services. Passionate about turning unstructured text into actionable
+intelligence.
+
+SKILLS
+- Python (expert)
+- Machine Learning
+- Natural Language Processing
+- Amazon Web Services
+- Prompt Engineering
+- REST API design
+
+TECHNOLOGIES
+FastAPI, Docker, LangChain, PyTorch, PostgreSQL, Git
+
+WORK EXPERIENCE
+
+Senior AI Engineer — Nexlify Solutions (2021 – Present)
+- Led the design and delivery of the Customer Support AI project, an LLM-powered
+  assistant that resolves 60% of inbound support tickets automatically.
+- Built NLP pipelines for intent classification and entity extraction using PyTorch
+  and Python.
+- Deployed inference services on Amazon Web Services using Docker and FastAPI.
+
+AI Engineer — DataMinds Lanka (2018 – 2021)
+- Developed the Document Intelligence Platform, extracting structured data from
+  scanned contracts and invoices using OCR and Natural Language Processing.
+- Designed REST APIs in FastAPI serving ML models to internal teams.
+
+PROJECTS
+- Customer Support AI: LLM-based support assistant. Python, LangChain, FastAPI,
+  Amazon Web Services.
+- Document Intelligence Platform: NLP document extraction system. Python, PyTorch,
+  Docker.
+
+EDUCATION
+- MSc in Artificial Intelligence, University of Moratuwa (2018)
+- BSc in Computer Science, University of Colombo (2015)
+
+DOMAINS
+Artificial Intelligence, Backend Development

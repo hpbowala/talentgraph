@@ -1,0 +1,43 @@
+MICHAEL JAYAWARDENA
+DevOps Engineer
+Email: michael.jayawardena@example.com | Location: Galle, Sri Lanka
+
+PROFESSIONAL SUMMARY
+DevOps Engineer with 8 years of experience automating infrastructure and delivery
+pipelines. Deep expertise in Amazon Web Services, infrastructure as code and
+container orchestration.
+
+SKILLS
+- Amazon Web Services
+- Infrastructure as Code
+- CI/CD automation
+- Container orchestration
+- Linux administration
+- Cost optimisation
+
+TECHNOLOGIES
+Terraform, Docker, Kubernetes, GitHub Actions, Prometheus, Grafana, Bash
+
+WORK EXPERIENCE
+
+DevOps Engineer — CloudReach Lanka (2019 – Present)
+- Technical lead for the Cloud Migration Initiative, moving 40+ on-premise
+  workloads to Amazon Web Services with Terraform-managed infrastructure.
+- Operates Kubernetes clusters hosting 120 microservices.
+- Drove the CI/CD Modernisation project, cutting release lead time from two weeks
+  to under one day with GitHub Actions.
+
+Systems Engineer — IslandHost (2016 – 2019)
+- Administered Linux server fleets and automated provisioning with Bash and
+  early Terraform adoption.
+
+PROJECTS
+- Cloud Migration Initiative: on-premise to AWS migration programme. Terraform,
+  Docker, Kubernetes, Amazon Web Services.
+- CI/CD Modernisation: pipeline automation rollout. GitHub Actions, Docker.
+
+EDUCATION
+- BSc in Computer Systems and Networking, University of Peradeniya (2015)
+
+DOMAINS
+DevOps, Cloud Infrastructure

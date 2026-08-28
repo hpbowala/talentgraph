@@ -1,0 +1,42 @@
+SARAH FERNANDO
+Frontend Engineer
+Email: sarah.fernando@example.com | Location: Colombo, Sri Lanka
+
+PROFESSIONAL SUMMARY
+Frontend Engineer with 5 years of experience crafting responsive, accessible web
+applications. Focused on component-driven development with ReactJS and TypeScript.
+
+SKILLS
+- ReactJS
+- TypeScript
+- JavaScript
+- UI/UX collaboration
+- Responsive design
+- Web accessibility
+
+TECHNOLOGIES
+Next.js, Tailwind CSS, Vite, Figma, Jest, Git
+
+WORK EXPERIENCE
+
+Frontend Engineer — Lanka Retail Tech (2021 – Present)
+- Lead frontend developer on the Retail Analytics Dashboard, a data visualisation
+  product built with ReactJS, TypeScript and Next.js.
+- Established the component library and design system used across three products.
+- Improved Lighthouse performance scores from 61 to 94.
+
+Web Developer — BrightPixel Studio (2019 – 2021)
+- Delivered the Corporate Website Revamp for a major insurance client using
+  JavaScript and modern CSS.
+- Collaborated with designers in Figma to translate mockups into pixel-perfect UI.
+
+PROJECTS
+- Retail Analytics Dashboard: interactive analytics frontend. ReactJS, TypeScript,
+  Next.js.
+- Corporate Website Revamp: marketing site rebuild. JavaScript, Tailwind CSS.
+
+EDUCATION
+- BSc in Information Technology, University of Kelaniya (2018)
+
+DOMAINS
+Frontend Development, User Experience

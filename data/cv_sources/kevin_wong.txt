@@ -1,0 +1,42 @@
+KEVIN WONG
+Full-Stack Developer
+Email: kevin.wong@example.com | Location: Negombo, Sri Lanka
+
+PROFESSIONAL SUMMARY
+Full-Stack Developer with 4 years of experience shipping web products end to end.
+Comfortable across ReactJS frontends, Node.js and Python backends, and
+Application Programming Interface design.
+
+SKILLS
+- JavaScript
+- Python
+- ReactJS
+- Node.js
+- Application Programming Interface design
+- Agile delivery
+
+TECHNOLOGIES
+Express, MongoDB, ReactJS, Flask, Docker, Git
+
+WORK EXPERIENCE
+
+Full-Stack Developer — Lanka Retail Tech (2022 – Present)
+- Built backend APIs and several frontend modules for the Retail Analytics
+  Dashboard using Node.js, Express and ReactJS.
+- Implemented export and scheduled-report features used by 200+ retail clients.
+
+Software Developer — TravelNest (2021 – 2022)
+- Developed the Booking Platform, a hotel reservation web app with a ReactJS
+  frontend and a Python Flask backend on MongoDB.
+
+PROJECTS
+- Retail Analytics Dashboard: analytics product — APIs and frontend modules.
+  Node.js, Express, ReactJS.
+- Booking Platform: hotel reservation web application. Python, Flask, ReactJS,
+  MongoDB.
+
+EDUCATION
+- BSc in Computer Science, Informatics Institute of Technology Colombo (2020)
+
+DOMAINS
+Full-Stack Development, Web Applications

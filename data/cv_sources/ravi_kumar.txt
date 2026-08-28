@@ -1,0 +1,43 @@
+RAVI KUMAR
+Data Engineer
+Email: ravi.kumar@example.com | Location: Colombo, Sri Lanka
+
+PROFESSIONAL SUMMARY
+Data Engineer with 5 years of experience designing batch and streaming data
+platforms. Builds reliable pipelines on Amazon Web Services with strong SQL and
+Python foundations.
+
+SKILLS
+- Python
+- SQL
+- Data pipeline design
+- Amazon Web Services
+- Data warehousing
+- Data quality engineering
+
+TECHNOLOGIES
+Apache Spark, Apache Airflow, Snowflake, Docker, dbt, Git
+
+WORK EXPERIENCE
+
+Data Engineer — CloudReach Lanka (2021 – Present)
+- Built the Enterprise Data Lake on Amazon Web Services, ingesting 30+ source
+  systems with Apache Spark and orchestrating workflows in Apache Airflow.
+- Supported the Cloud Migration Initiative by re-platforming legacy ETL jobs to
+  the new AWS environment.
+
+Analytics Engineer — InsightWorks (2019 – 2021)
+- Modelled warehouse schemas in Snowflake and dbt for marketing analytics.
+- Wrote complex SQL transformations powering executive dashboards.
+
+PROJECTS
+- Enterprise Data Lake: centralised data platform. Apache Spark, Apache Airflow,
+  Amazon Web Services, Python.
+- Cloud Migration Initiative: legacy ETL re-platforming. Python, SQL, Amazon Web
+  Services.
+
+EDUCATION
+- BSc in Computer Engineering, University of Peradeniya (2018)
+
+DOMAINS
+Data Engineering, Cloud Infrastructure
