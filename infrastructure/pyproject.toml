@@ -1,0 +1,18 @@
+[project]
+name = "talentgraph-infrastructure"
+version = "0.1.0"
+description = "AWS CDK infrastructure for TalentGraph"
+requires-python = ">=3.12"
+dependencies = [
+    "aws-cdk-lib>=2.170",
+    "constructs>=10.4",
+]
+
+[dependency-groups]
+dev = [
+    "ruff>=0.8",
+]
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"

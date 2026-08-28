@@ -1,0 +1,94 @@
+# Evaluation set — expected answers derive from tests/eval/ground_truth.md.
+#
+# Scope: the seven fictional profiles authored in data/cv_sources/. Any other CV
+# in the corpus is outside the ground truth, so a legitimate match from one shows
+# up as "spurious" and depresses precision without being an error — recall is the
+# metric to trust. Re-run `make ingest` after changing the dataset.
+#
+# Fields per case:
+#   id       stable identifier
+#   query    the question as a user would type it
+#   intent   expected classification
+#   people   people the answer must identify (retrieval precision/recall)
+#   follow_up_of  run in the same conversation, after the named case
+#   must_mention  substrings the answer must contain (path/gap correctness)
+
+- id: people-python
+  query: Who has Python experience?
+  intent: PEOPLE_LOOKUP
+  people: [Alice Perera, David Silva, Priya Raj, Kevin Wong, Ravi Kumar]
+
+- id: people-python-aws
+  query: Who has both Python and AWS?
+  intent: PEOPLE_LOOKUP
+  people: [Alice Perera, David Silva, Priya Raj, Ravi Kumar]
+
+- id: people-ai
+  query: Which employees have AI experience?
+  intent: PEOPLE_LOOKUP
+  people: [Alice Perera, Priya Raj]
+
+- id: followup-ai
+  query: Which of them has AI experience?
+  intent: PEOPLE_LOOKUP
+  follow_up_of: people-python-aws
+  people: [Alice Perera, Priya Raj]
+
+- id: rel-alice-nlp
+  query: How is Alice connected to NLP?
+  intent: RELATIONSHIP_EXPLORATION
+  people: [Alice Perera]
+  must_mention: [NLP]
+
+- id: rel-alice-tech
+  query: What technologies are connected to Alice's projects?
+  intent: RELATIONSHIP_EXPLORATION
+  people: [Alice Perera]
+  must_mention: [Customer Support AI]
+
+- id: match-python-aws-ai
+  query: Who would be suitable for an AI project requiring Python and AWS?
+  intent: PROJECT_MATCHING
+  people: [Alice Perera, Priya Raj]
+
+- id: team-three
+  query: Build a three-person team for a project requiring Python, AWS and React.
+  intent: TEAM_COMPOSITION
+  people: [Alice Perera]
+  must_mention: [React]
+
+- id: gap-analysis
+  query: What skills are missing for a project needing Python, AWS, React and Kubernetes?
+  intent: SKILL_GAP
+  must_mention: [Kubernetes]
+
+- id: compare-alice-david
+  query: Why would you select Alice over David for an AI project?
+  intent: PEOPLE_LOOKUP
+  people: [Alice Perera, David Silva]
+  must_mention: [Machine Learning]
+
+- id: overlap
+  query: Which people have overlapping skills?
+  intent: SKILL_DISCOVERY
+  people: [Alice Perera, Priya Raj]
+
+- id: profile-lookup
+  query: What does Michael Jayawardena know?
+  intent: PEOPLE_LOOKUP
+  people: [Michael Jayawardena]
+  must_mention: [AWS]
+
+- id: frontend-people
+  query: Who can work on a React frontend?
+  intent: PEOPLE_LOOKUP
+  people: [Sarah Fernando, Kevin Wong]
+
+- id: refusal-unknown
+  query: Who has experience with COBOL mainframe migration?
+  intent: PEOPLE_LOOKUP
+  people: []
+
+- id: greeting
+  query: What can you help me with?
+  intent: GENERAL
