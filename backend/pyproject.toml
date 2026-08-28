@@ -1,0 +1,48 @@
+[project]
+name = "talentgraph-backend"
+version = "0.1.0"
+description = "TalentGraph backend: CV ingestion, Obsidian knowledge graph, LangGraph multi-agent chat"
+requires-python = ">=3.12"
+dependencies = [
+    "openai>=1.60",
+    "pydantic>=2.9",
+    "langgraph>=0.3",
+    "pypdf>=5.0",
+    "python-frontmatter>=1.1",
+    "networkx>=3.4",
+    "fastapi>=0.115",
+    "uvicorn>=0.32",
+    "boto3>=1.35",
+    "bedrock-agentcore>=0.1",
+    "python-dotenv>=1.0",
+    "jinja2>=3.1",
+]
+
+[project.scripts]
+talentgraph-ingest = "app.ingest.cli:main"
+talentgraph-chat = "app.chat_cli:main"
+
+[dependency-groups]
+dev = [
+    "ruff>=0.8",
+    "pytest>=8.3",
+    "httpx>=0.28",
+    "pyyaml>=6.0",
+]
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B", "SIM"]
+
+[tool.pytest.ini_options]
+testpaths = ["../tests"]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["app"]

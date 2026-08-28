@@ -1,0 +1,29 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+*.egg-info/
+.pytest_cache/
+.ruff_cache/
+.cache/
+
+# Environment / secrets
+.env
+.env.*
+!.env.example
+
+# Node / frontend
+node_modules/
+frontend/dist/
+
+# CDK
+infrastructure/cdk.out/
+
+# OS / editor
+.DS_Store
+.idea/
+.vscode/
+
+# Obsidian workspace files (vault content itself IS committed)
+vault/.obsidian/
+/docs/*
