@@ -40,6 +40,7 @@ class ParsedNote:
     path: str
     aliases: list[str] = field(default_factory=list)
     body: str = ""
+    role: str = ""  # person notes only — the headline shown in the graph explorer
 
 
 @dataclass
@@ -57,7 +58,14 @@ def parse_note(path: Path, vault_dir: Path) -> tuple[ParsedNote, list[ParsedEdge
     name = str(post.get("name", path.stem))
     aliases = [str(a) for a in post.get("aliases", []) or []]
     rel_path = str(path.relative_to(vault_dir))
-    note = ParsedNote(name=name, type=note_type, path=rel_path, aliases=aliases, body=post.content)
+    note = ParsedNote(
+        name=name,
+        type=note_type,
+        path=rel_path,
+        aliases=aliases,
+        body=post.content,
+        role=str(post.get("role") or ""),
+    )
 
     edges: list[ParsedEdge] = []
     relations = SECTION_RELATIONS.get(note_type, {})

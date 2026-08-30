@@ -11,12 +11,19 @@ from pydantic import BaseModel
 
 from app.auth import AuthError, auth_enabled, authenticate
 from app.cv_store import CVStoreError
-from app.models import ChatResponse, ConversationDetail, ConversationSummary, CVLibrary
+from app.models import (
+    ChatResponse,
+    ConversationDetail,
+    ConversationSummary,
+    CVLibrary,
+    GraphSnapshot,
+)
 from app.service import (
     add_cv,
     delete_conversation,
     delete_cv,
     get_conversation,
+    graph_snapshot,
     handle_chat,
     list_conversations,
     list_cvs,
@@ -90,6 +97,12 @@ def conversation(conversation_id: str) -> ConversationDetail:
 def remove_conversation(conversation_id: str) -> dict:
     delete_conversation(conversation_id)
     return {"deleted": conversation_id}
+
+
+@app.get("/graph", response_model=GraphSnapshot)
+def graph() -> GraphSnapshot:
+    """The knowledge graph the answers are grounded in, as nodes and edges."""
+    return graph_snapshot()
 
 
 @app.get("/cvs", response_model=CVLibrary)

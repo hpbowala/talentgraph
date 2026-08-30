@@ -17,6 +17,7 @@ from app.service import (
     delete_conversation,
     delete_cv,
     get_conversation,
+    graph_snapshot,
     handle_chat,
     list_conversations,
     list_cvs,
@@ -61,6 +62,8 @@ def invoke(payload: dict, context=None) -> dict:
             return {"error": "Request payload must include a 'conversation_id' field."}
         delete_conversation(conversation_id)
         return {"deleted": conversation_id}
+    if action == "graph":
+        return graph_snapshot().model_dump()
     if action in {"list_cvs", "add_cv", "delete_cv", "reindex"}:
         return _cv_action(action, payload)
     if action != "chat":

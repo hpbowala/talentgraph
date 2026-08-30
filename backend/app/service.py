@@ -12,6 +12,7 @@ from app.agents.orchestrator import build_orchestrator
 from app.agents.state import HistoryTurn
 from app.graph import loader
 from app.graph.loader import load_graph
+from app.graph.snapshot import build_snapshot
 from app.ingest.extract_text import extract_text
 from app.ingest.reindex import cv_person_names, reindex
 from app.llm.provider import LLMProvider
@@ -23,12 +24,14 @@ from app.models import (
     CVLibrary,
     CVSummary,
     EvidenceRef,
+    GraphSnapshot,
 )
 
 TITLE_MAX_CHARS = 60
 MAX_EVIDENCE = 60
 
 _orchestrator = None
+_graph = None
 _provider: LLMProvider | None = None
 _graph_stamp: str | None = None
 
@@ -40,18 +43,27 @@ def _get_provider() -> LLMProvider:
     return _provider
 
 
-def _get_orchestrator():
-    """Built once per index build. The stamp lives with the vault, so a CV
+def _get_graph():
+    """Loaded once per index build. The stamp lives with the vault, so a CV
     uploaded through another runtime instance invalidates this one too."""
-    global _orchestrator, _graph_stamp
+    global _graph, _orchestrator, _graph_stamp
     try:
         stamp = cv_store.index_stamp()
     except Exception:  # noqa: BLE001 — an unreadable manifest must not break chat
         stamp = _graph_stamp
-    if _orchestrator is None or stamp != _graph_stamp:
-        graph = load_graph(force_reload=loader.cached_stamp() != stamp)
-        _orchestrator = build_orchestrator(graph, _get_provider())
+    if _graph is None or stamp != _graph_stamp:
+        _graph = load_graph(force_reload=loader.cached_stamp() != stamp)
+        _orchestrator = None  # bound to the graph it was built over
         _graph_stamp = stamp
+    return _graph
+
+
+def _get_orchestrator():
+    """Rebuilt whenever the graph underneath it changes."""
+    global _orchestrator
+    graph = _get_graph()
+    if _orchestrator is None:
+        _orchestrator = build_orchestrator(graph, _get_provider())
     return _orchestrator
 
 
@@ -159,6 +171,18 @@ def delete_conversation(conversation_id: str) -> None:
     conversation_store.delete(conversation_id)
 
 
+# ---------- knowledge graph ----------
+
+
+def graph_snapshot() -> GraphSnapshot:
+    """The whole graph as nodes and edges, for the frontend explorer.
+
+    Reads the same in-process graph the agents traverse, so the picture always
+    matches the answers.
+    """
+    return build_snapshot(_get_graph(), indexed_at=_graph_stamp)
+
+
 # ---------- CV library ----------
 
 
@@ -202,11 +226,11 @@ def delete_cv(filename: str) -> CVLibrary:
 def reindex_library() -> CVLibrary:
     """Rebuild the graph from the stored CVs. Minutes, not seconds — run it in
     the background (BackgroundTasks locally, an async Lambda invoke in AWS)."""
-    global _orchestrator, _graph_stamp
+    global _orchestrator, _graph, _graph_stamp
 
     report = reindex(provider=_get_provider())
     # Dropped, not rebuilt: the next question builds against the new graph.
-    _orchestrator, _graph_stamp = None, None
+    _orchestrator, _graph, _graph_stamp = None, None, None
     library = list_cvs()
     library.note_count = report.note_count
     return library

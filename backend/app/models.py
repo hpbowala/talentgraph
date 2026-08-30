@@ -63,6 +63,34 @@ class ChatResponse(BaseModel):
     conversation_id: str
 
 
+class GraphNode(BaseModel):
+    """One vault note as a point in the graph explorer."""
+
+    id: str = Field(description="Note name, which is also the node identity")
+    type: str = Field(description="person | skill | technology | project | domain | education")
+    degree: int = Field(description="Number of connections drawn for this node")
+    role: str | None = Field(default=None, description="Headline, for person nodes")
+    path: str | None = Field(default=None, description="Vault note path backing this node")
+
+
+class GraphEdge(BaseModel):
+    """A typed connection between two notes."""
+
+    source: str
+    target: str
+    relation: str = Field(description="e.g. HAS_SKILL, USES, WORKED_ON")
+    evidence: str | None = Field(default=None, description="CV quote the relation came from")
+
+
+class GraphSnapshot(BaseModel):
+    """The whole knowledge graph, as the explorer draws it."""
+
+    nodes: list[GraphNode] = Field(default_factory=list)
+    edges: list[GraphEdge] = Field(default_factory=list)
+    counts: dict[str, int] = Field(default_factory=dict, description="Node count per type")
+    indexed_at: str | None = Field(default=None, description="Stamp of the live index build")
+
+
 class CVSummary(BaseModel):
     """One document in the managed CV corpus."""
 

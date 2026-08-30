@@ -7,6 +7,7 @@ so this function bridges the frontend's REST routes to AWS:
     GET    /conversations             -> DynamoDB scan (summaries, newest first)
     GET    /conversations/{id}        -> DynamoDB get_item
     DELETE /conversations/{id}        -> DynamoDB delete_item
+    GET    /graph                     -> InvokeAgentRuntime (action: graph)
     GET    /cvs                       -> S3 (cvs/ listing + vault/.index.json)
     POST   /cvs                       -> InvokeAgentRuntime (action: add_cv) + async reindex
     DELETE /cvs/{filename}            -> InvokeAgentRuntime (action: delete_cv) + async reindex
@@ -83,6 +84,15 @@ def _chat(body: dict) -> dict:
     conversation_id = body.get("conversation_id") or f"conv-{uuid.uuid4()}"
     payload = _invoke({"message": message, "conversation_id": conversation_id}, conversation_id)
     return _response(200, payload)
+
+
+def _graph() -> dict:
+    """The whole knowledge graph, read from the runtime that holds it in memory.
+
+    Unlike the CV listing this cannot be served from the bucket: the vault is
+    markdown, and turning it into nodes and edges is the runtime's parser.
+    """
+    return _response(200, _invoke({"action": "graph"}, f"graph-{uuid.uuid4()}"))
 
 
 def _manifest() -> dict:
@@ -264,6 +274,8 @@ def handler(event: dict, context) -> dict:
         return _chat(body)
     if method == "GET" and path == "/conversations":
         return _list_conversations()
+    if method == "GET" and path == "/graph":
+        return _graph()
     if method == "GET" and path == "/cvs":
         return _list_cvs()
     if method == "POST" and path == "/cvs":

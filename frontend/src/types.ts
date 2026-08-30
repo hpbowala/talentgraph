@@ -51,3 +51,29 @@ export interface CVLibrary {
   /** Notes written by the rebuild that produced this response. */
   note_count?: number | null;
 }
+
+/** One vault note, as a point in the graph explorer. */
+export interface GraphNode {
+  id: string;
+  type: string;
+  /** Connections drawn for this node — drives its radius. */
+  degree: number;
+  role?: string | null;
+  path?: string | null;
+}
+
+/** A typed connection between two notes. */
+export interface GraphEdge {
+  source: string;
+  target: string;
+  relation: string;
+  evidence?: string | null;
+}
+
+export interface GraphSnapshot {
+  nodes: GraphNode[];
+  edges: GraphEdge[];
+  /** Node count per type. */
+  counts: Record<string, number>;
+  indexed_at?: string | null;
+}

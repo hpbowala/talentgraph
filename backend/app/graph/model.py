@@ -13,7 +13,7 @@ class KnowledgeGraph:
         self.g = nx.MultiDiGraph()
         self._alias_index: dict[str, str] = {}
         for note in notes:
-            self.g.add_node(note.name, type=note.type, path=note.path)
+            self.g.add_node(note.name, type=note.type, path=note.path, role=note.role)
             self._alias_index[note.name.lower()] = note.name
             for alias in note.aliases:
                 self._alias_index[alias.lower()] = note.name

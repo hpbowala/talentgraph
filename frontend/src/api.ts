@@ -4,6 +4,7 @@ import type {
   ConversationDetail,
   ConversationSummary,
   CVLibrary,
+  GraphSnapshot,
 } from "./types";
 
 // Same-origin by default in production builds; the localhost fallback is dev-only
@@ -81,6 +82,13 @@ async function failure(res: Response): Promise<Error> {
     /* not JSON */
   }
   return new Error(`The graph service replied with status ${res.status}.`);
+}
+
+/** The whole knowledge graph — the same nodes and edges the agents traverse. */
+export async function getGraph(): Promise<GraphSnapshot> {
+  const res = await apiFetch("/graph");
+  if (!res.ok) throw await failure(res);
+  return res.json();
 }
 
 export async function listCVs(): Promise<CVLibrary> {

@@ -216,7 +216,7 @@ Guards live in `components/RouteGuards.tsx` and read the session shared by
 | anything else | — | Redirects to `/` |
 
 `/app` rather than `/chat` is deliberate: CloudFront routes `/chat`,
-`/conversations*` and `/cvs*` to the Lambda proxy, so a page at `/chat` would
+`/conversations*`, `/cvs*` and `/graph` to the Lambda proxy, so a page at `/chat` would
 reach the API instead of the SPA. Deep links survive a refresh because the
 distribution already rewrites S3's 403 for an unknown key to `/index.html`.
 
@@ -282,7 +282,7 @@ Full walkthrough: **[DEPLOYMENT.md](DEPLOYMENT.md)**.
 One CDK stack in `us-east-1` creates every resource: S3 data bucket, S3 site
 bucket, DynamoDB table, Cognito user pool, AgentCore Runtime (arm64 image built
 from `backend/`), Lambda proxy with a Function URL, and a CloudFront distribution
-routing `/` to the SPA and `/chat`, `/conversations*` + `/cvs*` to the proxy.
+routing `/` to the SPA and `/chat`, `/conversations*`, `/cvs*` + `/graph` to the proxy.
 
 ```bash
 make openai-key    # once: OpenAI key → SSM SecureString
@@ -322,12 +322,31 @@ straight to `/app` while signed out bounces you to `/login` and then back to
 `/app` once you authenticate.
 
 Before a first deploy there is no user pool, so the landing button reads *Open the
-app* and goes straight to the chat.
+app* and goes straight to the workspace.
 
-Type a question, or pick one from the examples sidebar. Each answer shows the detected
+**The workspace.** Signing in lands on the graph, with the chat docked beside it as
+a split screen. Either side collapses to a rail and expands again from it — from the
+rail itself, from the chevron in a panel header, or from the *Graph* / *Chat*
+switches in the sidebar — and the divider between them drags (or takes arrow keys)
+to rebalance the split; a double-click restores it. Collapsing one panel always
+leaves the other open, and the layout is remembered across sessions.
+
+Type a question, or pick one from the examples. Each answer shows the detected
 intent and an expandable **Evidence** panel listing the graph relationships behind
 it. Follow-up questions work — *"Who has Python and AWS?"* then *"Which of them
 has AI experience?"* resolves correctly against conversation history.
+
+**Graph explorer.** The graph panel draws the vault itself — every
+note as a node, every `[[Wikilink]]` as a typed edge, laid out by a force
+simulation. Nodes are sized by how well connected they are and coloured by note
+type, and the legend doubles as a filter, so hiding *Technologies* leaves the
+people-to-skills structure on its own. Hovering lights up a note's immediate
+neighbourhood; clicking one opens its connections in the detail rail, each with
+its relation and the CV sentence the relation came from. **Focus** narrows the
+canvas to just the selected note and what it touches, which is the readable way
+to look at one person. Entity names inside an answer's **Evidence** panel are
+links into this view, so a claim in an answer selects that note in the graph
+beside it — expanding the graph panel first if it was collapsed.
 
 **CV library.** The sidebar opens the corpus the graph is built from: drop in a
 PDF, TXT or Markdown CV and it is extracted and folded into the graph, or remove
@@ -361,6 +380,7 @@ curl -X POST http://localhost:8000/chat \
 | `GET` | `/conversations` | List conversation threads |
 | `GET` | `/conversations/{id}` | Full thread with turns and evidence |
 | `DELETE` | `/conversations/{id}` | Delete a thread |
+| `GET` | `/graph` | The whole knowledge graph as nodes and edges, for the graph explorer |
 | `GET` | `/cvs` | List the CV corpus, each with the person indexed from it |
 | `POST` | `/cvs` | Upload a CV (`filename`, `content_base64`) — `202`, indexes in the background |
 | `DELETE` | `/cvs/{filename}` | Remove a CV — `202`, reindexes in the background |

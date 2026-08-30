@@ -1,4 +1,5 @@
 from app.graph.retriever import coverage, find_paths, find_people, get_person_profile
+from app.graph.snapshot import build_snapshot
 
 
 def test_roundtrip_nodes_and_types(kg):
@@ -78,3 +79,41 @@ def test_fuzzy_person_resolution(kg):
     assert kg.resolve("alice") == "Alice Perera"
     assert kg.resolve("Alice Perera") == "Alice Perera"
     assert kg.resolve("aws") == "AWS"
+
+
+def test_snapshot_flattens_nodes_and_edges(kg):
+    snapshot = build_snapshot(kg, indexed_at="2026-01-01T00:00:00+00:00")
+
+    assert snapshot.indexed_at == "2026-01-01T00:00:00+00:00"
+    assert snapshot.counts["person"] == 2
+    assert {n.id for n in snapshot.nodes if n.type == "person"} == {"Alice Perera", "Bob Silva"}
+
+    alice = next(n for n in snapshot.nodes if n.id == "Alice Perera")
+    assert alice.role == "Senior AI Engineer"
+    assert alice.path == "People/Alice Perera.md"
+
+    edge = next(
+        e for e in snapshot.edges if e.source == "Alice Perera" and e.target == "Python"
+    )
+    assert edge.relation == "HAS_SKILL"
+    assert edge.evidence == "worked with Python"
+
+
+def test_snapshot_degree_counts_drawn_edges(kg):
+    snapshot = build_snapshot(kg)
+    degrees = {n.id: n.degree for n in snapshot.nodes}
+
+    drawn = {}
+    for edge in snapshot.edges:
+        drawn[edge.source] = drawn.get(edge.source, 0) + 1
+        drawn[edge.target] = drawn.get(edge.target, 0) + 1
+
+    assert degrees["Alice Perera"] == drawn["Alice Perera"]
+    # Python is held by both people, so it is better connected than either of them.
+    assert degrees["Python"] > 0
+
+
+def test_snapshot_collapses_parallel_edges(kg):
+    snapshot = build_snapshot(kg)
+    keys = [(e.source, e.target, e.relation) for e in snapshot.edges]
+    assert len(keys) == len(set(keys))

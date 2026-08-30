@@ -6,9 +6,9 @@ Resources:
 - DynamoDB table        conversation persistence (app/conversation_store.py)
 - Cognito user pool     gates the public API; sign-up disabled, accounts created by hand
 - AgentCore Runtime     arm64 container built from backend/, serves the LangGraph app
-- Lambda proxy          browser-facing API: signs InvokeAgentRuntime for /chat and /cvs* and
+- Lambda proxy          browser-facing API: signs InvokeAgentRuntime for /chat, /cvs* and /graph and
                         reads conversations from DynamoDB directly (list/get/delete)
-- CloudFront + S3       serves the built frontend; routes /chat, /conversations* and /cvs* to
+- CloudFront + S3       serves the built frontend; routes /chat, /conversations*, /cvs* and /graph to
                         the Lambda Function URL so the SPA can use same-origin requests
 
 The OpenAI key is NOT a stack resource: create it once as a SecureString parameter
@@ -346,6 +346,7 @@ class TalentGraphStack(Stack):
                 "/chat": api_behavior,
                 "/conversations*": api_behavior,
                 "/cvs*": api_behavior,
+                "/graph": api_behavior,
             },
             error_responses=[
                 # S3 + OAC answers 403 for unknown keys; hand the SPA its index instead

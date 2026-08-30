@@ -10,12 +10,12 @@ Browser
    │  sign in (SRP) ──────► Cognito user pool   (no sign-up; one admin-made account)
    ▼
 CloudFront ──────────────► S3 frontend bucket   (React SPA, default behavior)
-   │  /chat, /conversations*, /cvs*   + Authorization: Bearer <access token>
+   │  /chat, /conversations*, /cvs*, /graph  + Authorization: Bearer <access token>
    ▼
 Lambda proxy (Function URL) ──► Cognito GetUser  (validates the token; 401 if not)
    │                        └──► DynamoDB conversations table   (list/get/delete)
    │                        └──► S3 data bucket  (GET /cvs listing + index manifest)
-   │  POST /chat, POST/DELETE /cvs (SigV4-signed InvokeAgentRuntime)
+   │  POST /chat, POST/DELETE /cvs, GET /graph (SigV4-signed InvokeAgentRuntime)
    │  ↳ then re-invokes itself asynchronously to run the reindex
    ▼
 AgentCore Runtime (arm64 container from backend/)
@@ -54,7 +54,7 @@ is gated.
 must reach `index.html`: S3 with OAC answers 403 for a key like `/app`, and the
 stack's `error_responses` rewrites that to `/index.html` with a 200, so a refresh
 on any route works. And the app's own paths must not collide with the API's — the
-chat screen is at `/app`, not `/chat`, because `/chat`, `/conversations*` and
+chat screen is at `/app`, not `/chat`, because `/chat`, `/conversations*`, `/graph` and
 `/cvs*` are behaviors routed to the Lambda proxy and would never reach the SPA.
 
 The CDK app lives in `infrastructure/` (`app.py`, `stacks/talentgraph_stack.py`,

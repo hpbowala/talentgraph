@@ -24,7 +24,11 @@ interface Props {
   cvCount: number;
   /** Signed-in account, or null when auth is not configured (local dev). */
   username: string | null;
+  graphOpen: boolean;
+  chatOpen: boolean;
   onNew: () => void;
+  onToggleGraph: () => void;
+  onToggleChat: () => void;
   onOpenLibrary: () => void;
   onSelect: (id: string) => void;
   onDelete: (id: string) => void;
@@ -39,7 +43,11 @@ export function Sidebar({
   open,
   cvCount,
   username,
+  graphOpen,
+  chatOpen,
   onNew,
+  onToggleGraph,
+  onToggleChat,
   onOpenLibrary,
   onSelect,
   onDelete,
@@ -53,6 +61,38 @@ export function Sidebar({
         <button className="new-conversation" onClick={onNew}>
           New chat
         </button>
+        <div className="pane-switches">
+          <button
+            className={graphOpen ? "pane-switch on" : "pane-switch"}
+            aria-pressed={graphOpen}
+            onClick={onToggleGraph}
+          >
+            <svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+              <path
+                d="M5.6 6.4l4.8-2.3M5.4 9.3l5 2.2M4 8.6a1.9 1.9 0 100-3.8 1.9 1.9 0 000 3.8zM12 5.1a1.6 1.6 0 100-3.2 1.6 1.6 0 000 3.2zM12 14.1a1.6 1.6 0 100-3.2 1.6 1.6 0 000 3.2z"
+                stroke="currentColor"
+                strokeWidth="1.3"
+                strokeLinejoin="round"
+              />
+            </svg>
+            Graph
+          </button>
+          <button
+            className={chatOpen ? "pane-switch on" : "pane-switch"}
+            aria-pressed={chatOpen}
+            onClick={onToggleChat}
+          >
+            <svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+              <path
+                d="M13.5 8.2c0 2.6-2.5 4.7-5.5 4.7-.7 0-1.4-.1-2-.3L2.5 13.7l1-2.6A4.4 4.4 0 012.5 8.2c0-2.6 2.5-4.7 5.5-4.7s5.5 2.1 5.5 4.7z"
+                stroke="currentColor"
+                strokeWidth="1.3"
+                strokeLinejoin="round"
+              />
+            </svg>
+            Chat
+          </button>
+        </div>
         <button className="cv-library-open" onClick={onOpenLibrary}>
           <svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true">
             <path
