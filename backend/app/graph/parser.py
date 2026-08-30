@@ -1,8 +1,7 @@
 """Parse the Obsidian vault into nodes and typed edges.
 
 Inverse of app/ingest/vault_writer.py: note type + section heading determine the
-relation type. Backlink sections (e.g. "People" on a skill note) are ignored so
-each relation is created exactly once, from its owning note.
+relation. Backlink sections are ignored so each relation is created once.
 """
 
 import re

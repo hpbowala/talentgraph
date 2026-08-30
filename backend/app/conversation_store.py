@@ -1,10 +1,8 @@
 """Conversation persistence (chat history / threads).
 
 Two backends, selected by CONVERSATION_STORE:
-- "memory" (default): per-process dict — no AWS dependency, right for local dev.
-- "dynamodb": one item per conversation keyed by conversation_id; the table is
-  created on first use (PAY_PER_REQUEST) so no provisioning step is needed.
-  Credentials/region resolve through the standard boto3 chain.
+- "memory" (default): per-process dict, for local dev.
+- "dynamodb": one item per conversation, table created on first use.
 """
 
 import os

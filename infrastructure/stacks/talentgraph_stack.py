@@ -1,22 +1,15 @@
 """TalentGraph MVP stack.
 
-Resources:
-- S3 data bucket        cvs/ + vault/ + profiles/ prefixes; the runtime downloads vault/ at
-                        cold start and rewrites both when a CV is uploaded or deleted
+- S3 data bucket        cvs/ + vault/ + profiles/
 - DynamoDB table        conversation persistence (app/conversation_store.py)
-- Cognito user pool     gates the public API; sign-up disabled, accounts created by hand
+- Cognito user pool     gates the public API; sign-up disabled
 - AgentCore Runtime     arm64 container built from backend/, serves the LangGraph app
-- Lambda proxy          browser-facing API: signs InvokeAgentRuntime for /chat, /cvs* and /graph and
-                        reads conversations from DynamoDB directly (list/get/delete)
-- CloudFront + S3       serves the built frontend; routes /chat, /conversations*, /cvs* and /graph to
-                        the Lambda Function URL so the SPA can use same-origin requests
+- Lambda proxy          browser-facing API (see infrastructure/proxy/handler.py)
+- CloudFront + S3       the built frontend, with the API routes on the same origin
 
-The OpenAI key is NOT a stack resource: create it once as a SecureString parameter
-(name from OPENAI_KEY_PARAM in backend/.env) before the first deploy — `make openai-key`.
-
-Nor is the user account: `make cognito-user` creates it after the pool exists, so the
-password stays out of CloudFormation. The SPA needs the pool ids at build time, which is
-why a clean-slate install deploys twice — see DEPLOYMENT.md.
+The OpenAI key and the operator account are created out of band — `make
+openai-key` and `make cognito-user` — so neither reaches CloudFormation. The SPA
+needs the pool ids at build time, so a clean-slate install deploys twice.
 """
 
 import os
@@ -78,10 +71,8 @@ class TalentGraphStack(Stack):
         )
         table_name = os.getenv("CONVERSATIONS_TABLE", "talentgraph-conversations")
 
-        # Stateful resources (CV corpus, chat history, user accounts) are RETAINed
-        # by default, so neither `cdk destroy` nor a property change that forces
-        # replacement can take the data with it. Set RETAIN_DATA=false in
-        # backend/.env for a throwaway environment you intend to tear down whole.
+        # RETAIN by default, so neither `cdk destroy` nor a replacement can take
+        # the data with it. RETAIN_DATA=false for a throwaway environment.
         retain_data = os.getenv("RETAIN_DATA", "true").strip().lower() not in (
             "false",
             "0",
@@ -113,9 +104,7 @@ class TalentGraphStack(Stack):
             removal_policy=data_removal,
         )
 
-        # auth
-        # Sign-up is disabled: the operator account is created out of band with
-        # `make cognito-user`, so no password is ever written to a template.
+        # auth — sign-up disabled, account created by `make cognito-user`
         user_pool = cognito.UserPool(
             self,
             "UserPool",
@@ -254,9 +243,8 @@ class TalentGraphStack(Stack):
         )
         runtime.node.add_dependency(runtime_role)
 
-        # proxy
-        # A fixed name lets the function grant itself invoke rights without a
-        # circular dependency — it re-invokes itself to run reindexes off-request.
+        # proxy — fixed name so it can grant itself invoke rights (it re-invokes
+        # itself to run reindexes off-request) without a circular dependency
         proxy_name = "talentgraph-api-proxy"
         proxy = lambda_.Function(
             self,
@@ -307,9 +295,7 @@ class TalentGraphStack(Stack):
             ),
         )
 
-        # frontend
-        # Not covered by RETAIN_DATA: this holds the compiled SPA, which every
-        # deploy rewrites from source. There is nothing here to lose.
+        # frontend — always destroyed: every deploy rebuilds the SPA from source
         site_bucket = s3.Bucket(
             self,
             "FrontendBucket",

@@ -1,8 +1,7 @@
 """CDK entrypoint: synthesizes the single TalentGraph stack.
 
-Resource names (buckets, DynamoDB table, SSM key parameter) come from
-backend/.env so the backend and the infrastructure always agree; see
-backend/.env.example for the full list.
+Resource names come from backend/.env so the backend and the infrastructure
+always agree.
 """
 
 import os

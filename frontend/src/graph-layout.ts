@@ -1,9 +1,7 @@
 /** Force-directed layout for the graph explorer.
  *
- *  Written by hand rather than pulled from d3-force: the whole simulation is
- *  three forces over a few hundred nodes, and the explorer needs to drive the
- *  ticks itself so it can render into a canvas on the same frame.
- */
+ *  Hand-rolled rather than d3-force: three forces over a few hundred nodes, and
+ *  the explorer drives the ticks itself to render on the same frame. */
 
 import type { GraphEdge, GraphNode } from "./types";
 
@@ -29,9 +27,8 @@ export interface SimLink {
   evidence: string | null;
 }
 
-/** Concentric bands for the starting positions: people in the middle, the
- *  vocabulary they connect through further out. A good opening arrangement is
- *  worth more than extra iterations. */
+/** Starting positions, in concentric bands: people in the middle, the
+ *  vocabulary they connect through further out. */
 const TYPE_RANK: Record<string, number> = {
   person: 0,
   project: 1,
@@ -99,9 +96,8 @@ export class Simulation {
       };
     });
 
-    // A rebuild seeded with the previous positions starts close to its answer,
-    // so it needs a nudge rather than a full reheat — that is what makes
-    // toggling a type filter feel immediate instead of scattering the graph.
+    // Seeded with the previous positions, so a nudge rather than a full reheat
+    // — otherwise toggling a type filter scatters the graph.
     this.alpha = seed && seed.size > 0 ? SEEDED_ALPHA : 1;
 
     this.byId = new Map(this.nodes.map((n) => [n.id, n]));
@@ -113,10 +109,8 @@ export class Simulation {
       return [{ source, target, relation: edge.relation, evidence: edge.evidence ?? null }];
     });
 
-    // Weight each spring by the degree of the nodes it joins, counted within
-    // the visible graph. A leaf hanging off a hub is then pulled towards the
-    // hub rather than dragging it around — without this, "Python" with its 95
-    // connections would be yanked in 95 directions at once.
+    // Springs weighted by node degree within the visible graph, so a leaf is
+    // pulled towards its hub instead of "Python" being yanked 95 ways at once.
     const linkCount = new Map<SimNode, number>();
     for (const link of this.links) {
       linkCount.set(link.source, (linkCount.get(link.source) ?? 0) + 1);
@@ -153,9 +147,8 @@ export class Simulation {
     if (this.settled) return false;
     const { nodes, links, springs, alpha } = this;
 
-    // Repulsion — every pair, which is affordable at this scale (a few hundred
-    // nodes) and avoids the failure mode of a cutoff radius: disconnected
-    // clusters drifting apart forever.
+    // Repulsion over every pair: affordable at a few hundred nodes, and avoids
+    // disconnected clusters drifting apart forever under a cutoff radius.
     for (let i = 0; i < nodes.length; i++) {
       const a = nodes[i];
       for (let j = i + 1; j < nodes.length; j++) {
@@ -164,9 +157,8 @@ export class Simulation {
         let dy = b.y - a.y;
         let d2 = dx * dx + dy * dy;
         if (d2 < 1) {
-          // Coincident nodes have no direction to separate along; nudge them
-          // apart deterministically by index rather than at random, so the
-          // layout is reproducible.
+          // No direction to separate along; nudge by index rather than at
+          // random, so the layout stays reproducible.
           dx = ((i % 7) - 3) * 0.3 + 0.1;
           dy = ((j % 7) - 3) * 0.3 + 0.1;
           d2 = dx * dx + dy * dy;
@@ -221,13 +213,9 @@ export class Simulation {
     return true;
   }
 
-  /** Bounding box of the laid-out nodes, for framing the view.
-   *
-   *  `trim` discards that fraction of nodes from each edge before measuring.
-   *  A vault always has a few unconnected fragments that drift far out, and
-   *  framing to the literal extremes would shrink the interesting middle to
-   *  nothing to accommodate them.
-   */
+  /** Bounding box of the laid-out nodes, for framing the view. `trim` discards
+   *  that fraction from each edge first — a few unconnected fragments always
+   *  drift far out, and framing to them shrinks the middle to nothing. */
   bounds(trim = 0): { minX: number; minY: number; maxX: number; maxY: number } {
     if (this.nodes.length === 0) return { minX: -1, minY: -1, maxX: 1, maxY: 1 };
     const pad = Math.max(...this.nodes.map((n) => n.r));

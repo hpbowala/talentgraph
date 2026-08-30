@@ -4,9 +4,8 @@
 # ///
 """Render the authored CV sources in data/cv_sources/ to PDFs in data/sample_cvs/.
 
-The corpus the app indexes holds one document per person, so the .txt originals
-live outside it — otherwise each fictional person would appear twice in the CV
-library and deleting their PDF would silently leave the .txt to be re-indexed.
+The .txt originals live outside the indexed corpus, which holds one document
+per person.
 
 Run with: uv run scripts/generate_cv_pdfs.py
 """

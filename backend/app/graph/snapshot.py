@@ -1,10 +1,8 @@
 """Serialisable view of the knowledge graph, for the frontend graph explorer.
 
-The chat path only ever needs the slice of the graph an answer touches; the
-explorer needs the whole thing at once. This module flattens the in-memory
-MultiDiGraph into plain nodes and edges — the same relations the agents
-traverse, so what the explorer draws is literally what the answers are grounded
-in.
+Flattens the in-memory MultiDiGraph the agents traverse into plain nodes and
+edges — the chat path only needs the slice an answer touches, the explorer
+needs the whole thing at once.
 """
 
 from app.graph.model import KnowledgeGraph
@@ -14,8 +12,8 @@ from app.models import GraphEdge, GraphNode, GraphSnapshot
 def build_snapshot(kg: KnowledgeGraph, indexed_at: str | None = None) -> GraphSnapshot:
     """Flatten the graph into nodes + edges.
 
-    Parallel edges carrying the same relation are collapsed (the vault can state
-    a relation from both ends), keeping the first evidence quote we see.
+    Parallel edges with the same relation are collapsed, keeping the first
+    evidence quote.
     """
     seen: set[tuple[str, str, str]] = set()
     edges: list[GraphEdge] = []

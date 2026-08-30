@@ -1,7 +1,6 @@
 """Graph-aware retrieval tools used by the specialist agents.
 
-Every function returns plain data plus human-readable evidence strings so the
-synthesis step can ground its answer and show its work.
+Each returns plain data plus evidence strings for the synthesis step to cite.
 """
 
 from dataclasses import dataclass, field

@@ -12,9 +12,8 @@ import type {
 const API_BASE =
   import.meta.env.VITE_API_BASE ?? (import.meta.env.DEV ? "http://localhost:8000" : "");
 
-/** Every call goes through here so the access token is attached in one place
- *  and an expired session is handled the same way everywhere. getAccessToken
- *  returns null when auth is not configured, leaving requests unchanged. */
+/** Single place the access token is attached and an expired session handled.
+ *  getAccessToken returns null when auth is not configured. */
 async function apiFetch(path: string, init: RequestInit = {}): Promise<Response> {
   const token = await getAccessToken();
   const headers = new Headers(init.headers);

@@ -4,25 +4,21 @@ import {
   CognitoUserPool,
 } from "amazon-cognito-identity-js";
 
-// Injected at build time by `make frontend-build` from the stack outputs. When
-// they are absent — the local dev default — auth is off and the app renders
-// straight away. This mirrors the backend, which likewise only gates requests
-// when COGNITO_USER_POOL_ID is set (see backend/app/auth.py).
+// Injected at build time by `make frontend-build` from the stack outputs. Absent
+// locally, where auth is off — same rule as backend/app/auth.py.
 const USER_POOL_ID = import.meta.env.VITE_COGNITO_USER_POOL_ID ?? "";
 const CLIENT_ID = import.meta.env.VITE_COGNITO_CLIENT_ID ?? "";
 
-/** `aws cloudformation describe-stacks` prints "None" for an output the stack
- *  does not have, and Vite bakes whatever it is given in verbatim — so treat
- *  that as unset rather than letting it reach the SDK as a pool id. */
+/** describe-stacks prints "None" for a missing output and Vite bakes it in
+ *  verbatim, so treat that as unset. */
 function configured(value: string): boolean {
   return value !== "" && value !== "None" && value !== "undefined";
 }
 
 export const authEnabled = configured(USER_POOL_ID) && configured(CLIENT_ID);
 
-// CognitoUserPool validates the id format and throws on a bad one. Letting that
-// escape would take the whole bundle down at import time, so a misconfigured
-// build fails at the login form instead, where the message can be seen.
+// CognitoUserPool throws on a malformed id; caught so a misconfigured build
+// fails at the login form rather than at import time, with a blank page.
 const pool = (() => {
   if (!authEnabled) return null;
   try {
@@ -64,9 +60,7 @@ export function signIn(username: string, password: string): Promise<void> {
           // Cognito is deliberately vague here (prevent_user_existence_errors),
           // so pass its wording through rather than inventing a better one.
           reject(new Error(err?.message ?? "Could not sign in.")),
-        // Only reachable if an account is created without --permanent; the
-        // documented setup uses a permanent password, so this stays a dead end
-        // with a message that says what to do rather than a blank screen.
+        // Only reachable for an account created without --permanent.
         newPasswordRequired: () =>
           reject(
             new Error(

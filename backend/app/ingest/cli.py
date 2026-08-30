@@ -1,9 +1,6 @@
 """Ingestion CLI: CVs -> extraction -> normalization -> Obsidian vault (-> S3).
 
 Run from backend/: uv run talentgraph-ingest [--upload]
-
-The same pipeline runs behind the /cvs API when a CV is uploaded or deleted
-through the app (app/ingest/reindex.py).
 """
 
 import argparse

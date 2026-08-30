@@ -1,8 +1,7 @@
 """CV -> vault build, shared by the ingestion CLI and the /cvs API.
 
-One pass over the corpus: extract each CV into a CVProfile, normalize entity
-names across all of them, then regenerate the vault from scratch so entities
-belonging only to a removed CV disappear with it.
+Extract each CV into a CVProfile, normalize entity names across all of them,
+then regenerate the vault from scratch so a removed CV's entities go with it.
 """
 
 import shutil
@@ -89,9 +88,8 @@ def build_profiles(
             log(f"  LLM merge pass: {extra}")
             report.profiles = [normalize_profile(p, extra) for p in report.profiles]
 
-    # Keyed only once names are final: normalization rewrites person_name (a CV
-    # read as "ALICE PERERA" becomes "Alice Perera"), and the vault writer and
-    # the /cvs library both look these up by the normalized name.
+    # Keyed after normalization: it rewrites person_name, and both the vault
+    # writer and the /cvs library look these up by the normalized name.
     report.sources = {
         profile.person_name: path.name
         for profile, path in zip(report.profiles, cv_paths, strict=True)

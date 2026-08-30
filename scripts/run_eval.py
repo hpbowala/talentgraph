@@ -1,10 +1,8 @@
 """Evaluate TalentGraph against tests/eval/queries.yaml.
 
-Scores the dimensions the requirements specification asks for: intent
-classification accuracy, candidate retrieval precision/recall/F1, answer
-groundedness signals, and response latency.
-
-Run it through the backend environment (it imports the app for in-process mode):
+Scores intent classification, retrieval precision/recall/F1, groundedness and
+latency. Run through the backend environment, which it imports for in-process
+mode:
 
     make eval                                                  # in-process
     cd backend && uv run python ../scripts/run_eval.py --url https://<site>
@@ -63,10 +61,8 @@ def score_case(case: dict, response: dict) -> dict:
         "evidence_count": len(response.get("evidence", [])),
     }
 
-    # Retrieval quality: does the prose name the people it should, and only those?
-    # Precision is a strict lower bound — a name counts against it wherever it
-    # appears, including in legitimate "X has Python but not AWS" commentary. Treat
-    # the `spurious` list as items for human review, not confirmed errors.
+    # Precision is a strict lower bound: a name counts against it wherever it
+    # appears, so `spurious` is for review, not a list of confirmed errors.
     if expected_people is not None:
         named = {p for p in all_people(case) if p in answer}
         expected = set(expected_people)

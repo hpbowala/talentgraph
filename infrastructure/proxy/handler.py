@@ -1,7 +1,6 @@
 """Browser-facing API proxy (Lambda Function URL behind CloudFront).
 
-AgentCore invocations require SigV4-signed requests, which the SPA cannot make,
-so this function bridges the frontend's REST routes to AWS:
+AgentCore needs SigV4-signed requests, which the SPA cannot make:
 
     POST   /chat                      -> bedrock-agentcore InvokeAgentRuntime
     GET    /conversations             -> DynamoDB scan (summaries, newest first)
@@ -12,20 +11,12 @@ so this function bridges the frontend's REST routes to AWS:
     POST   /cvs                       -> InvokeAgentRuntime (action: add_cv) + async reindex
     DELETE /cvs/{filename}            -> InvokeAgentRuntime (action: delete_cv) + async reindex
 
-Conversation reads go straight to the table the runtime writes (see
-backend/app/conversation_store.py) so a chat turn is not needed to browse history.
-The CV listing is read from the data bucket for the same reason — the SPA polls
-it while a rebuild is running.
+Reads go straight to DynamoDB and S3 so browsing history or polling the CV
+listing needs no chat turn. A rebuild takes minutes, so CV writes return 202 and
+this function re-invokes itself asynchronously to drive the reindex.
 
-Storing a CV is quick, but rebuilding the graph around it takes minutes: far
-longer than a browser request may hang. So writes return 202 immediately and
-this function invokes itself asynchronously to drive the runtime's reindex; the
-SPA polls GET /cvs until the index stamp moves.
-
-Every HTTP route requires a Cognito access token (see _authenticate). This is
-the only public entry point to the data, so the check lives here rather than in
-the runtime, which is reachable only through SigV4-signed calls this function
-makes itself.
+Every route requires a Cognito access token — this is the only public entry
+point to the data.
 """
 
 import base64
@@ -89,8 +80,8 @@ def _chat(body: dict) -> dict:
 def _graph() -> dict:
     """The whole knowledge graph, read from the runtime that holds it in memory.
 
-    Unlike the CV listing this cannot be served from the bucket: the vault is
-    markdown, and turning it into nodes and edges is the runtime's parser.
+    Cannot be served from the bucket: the vault is markdown, and the parser
+    lives in the runtime.
     """
     return _response(200, _invoke({"action": "graph"}, f"graph-{uuid.uuid4()}"))
 
@@ -224,10 +215,8 @@ def _delete_conversation(conversation_id: str) -> dict:
 def _authenticate(event: dict) -> dict | None:
     """Return an error response when the request has no valid access token.
 
-    The token is validated by calling Cognito's GetUser with it, which checks
-    signature, expiry and revocation in one step — no JWT library, and so no
-    bundling step for this asset directory. Authorisation comes from the token
-    itself, so the function's own role needs no Cognito permissions.
+    Validated by calling Cognito's GetUser with the token — no JWT library, and
+    so no bundling step for this asset directory.
     """
     if not USER_POOL_ID:
         return None

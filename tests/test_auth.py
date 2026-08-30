@@ -1,8 +1,4 @@
-"""Cognito gating: header parsing, Cognito's verdict, and the FastAPI gate.
-
-The gate is default-deny, so the cases that matter most are the ones where a
-request should NOT get through.
-"""
+"""Cognito gating: header parsing, Cognito's verdict, and the FastAPI gate."""
 
 import pytest
 from botocore.exceptions import ClientError

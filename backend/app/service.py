@@ -177,8 +177,7 @@ def delete_conversation(conversation_id: str) -> None:
 def graph_snapshot() -> GraphSnapshot:
     """The whole graph as nodes and edges, for the frontend explorer.
 
-    Reads the same in-process graph the agents traverse, so the picture always
-    matches the answers.
+    Reads the same in-process graph the agents traverse.
     """
     return build_snapshot(_get_graph(), indexed_at=_graph_stamp)
 
@@ -205,7 +204,7 @@ def list_cvs() -> CVLibrary:
 def add_cv(filename: str, content: bytes) -> CVLibrary:
     """Validate and store an uploaded CV.
 
-    Storing is fast; making the CV answerable is not, so the caller triggers
+    Making the CV answerable is not fast, so the caller triggers
     reindex_library() separately and the UI polls list_cvs() for the new stamp.
     """
     filename = cv_store.safe_filename(filename)

@@ -35,10 +35,8 @@ export function GraphExplorer({ focus, focusToken, onCollapse }: Props) {
   const [fitToken, setFitToken] = useState(0);
   const [appliedFocus, setAppliedFocus] = useState(focusToken ?? 0);
 
-  // The pane stays mounted, so a focus request from chat has to be applied on
-  // the way in. The token — not the id — is what marks a request as new, so
-  // asking twice for the same node still lands. Adjusting during render keeps
-  // it out of an effect, and so out of a second render pass.
+  // The pane stays mounted, so a focus request from chat is applied on the way
+  // in. Keyed by token, not id, so asking twice for the same node still lands.
   if ((focusToken ?? 0) !== appliedFocus) {
     setAppliedFocus(focusToken ?? 0);
     if (focus) {

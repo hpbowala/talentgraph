@@ -1,8 +1,7 @@
 """AWS Bedrock AgentCore Runtime entrypoint.
 
-Serves POST /invocations and GET /ping on port 8080 per the AgentCore service
-contract. In the cloud the OpenAI key is fetched from SSM Parameter Store and the
-vault is downloaded from S3 at cold start (VAULT_SOURCE=s3).
+Serves POST /invocations and GET /ping on port 8080 per the AgentCore contract.
+The OpenAI key comes from SSM and the vault from S3 at cold start.
 """
 
 import base64
@@ -79,9 +78,7 @@ def invoke(payload: dict, context=None) -> dict:
 def _cv_action(action: str, payload: dict) -> dict:
     """CV library management: list, upload (base64 body), delete and reindex.
 
-    Storing and deleting are quick; "reindex" re-extracts the corpus, rewrites
-    the vault in S3 and reloads the graph, which takes minutes — the proxy
-    invokes it asynchronously.
+    "reindex" takes minutes, so the proxy invokes it asynchronously.
     """
     try:
         if action == "list_cvs":

@@ -1,9 +1,7 @@
 """Single point of access to the OpenAI API.
 
-All agent and ingestion code talks to `LLMProvider`, never to the OpenAI SDK
-directly, so the model/provider can change without touching agent logic.
-Structured-output calls are cached on disk keyed by (model, prompts, schema) so
-repeated ingestion runs during development cost nothing.
+Agent and ingestion code talks to `LLMProvider`, never to the SDK directly.
+Structured-output calls are cached on disk by (model, prompts, schema).
 """
 
 import hashlib

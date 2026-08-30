@@ -1,6 +1,5 @@
-/** Shared vocabulary for the graph explorer: how each note type and relation is
- *  named and coloured. Kept out of the components so the canvas, the legend and
- *  the detail panel cannot drift apart. */
+/** How each note type and relation is named and coloured, shared so the canvas,
+ *  the legend and the detail panel cannot drift apart. */
 
 export const NODE_TYPES = [
   "person",

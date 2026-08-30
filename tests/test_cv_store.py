@@ -1,8 +1,7 @@
 """Unit tests for the local CV store: name safety, limits, and the round trip
 between the stored corpus and the index manifest the UI reads.
 
-The S3 backend is exercised manually against AWS; the logic that guards the API
-(what may be uploaded, and what a listing reports) is backend-independent.
+The S3 backend is exercised manually against AWS.
 """
 
 import pytest

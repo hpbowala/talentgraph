@@ -1,9 +1,7 @@
 """Entity normalization: map surface forms to canonical entity names.
 
-Two layers:
-1. A deterministic alias table (primary mechanism, unit-testable).
-2. An optional LLM merge pass over the union of remaining names to catch
-   variants the table does not know (run once per ingestion, cached on disk).
+A deterministic alias table, then an optional LLM merge pass over the names it
+does not know (run once per ingestion, cached on disk).
 """
 
 from pydantic import BaseModel, Field

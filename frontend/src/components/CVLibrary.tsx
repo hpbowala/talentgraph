@@ -18,13 +18,8 @@ type Busy = { verb: string; name: string; note?: string } | null;
 
 const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
-/**
- * Manages the CV corpus the graph is built from. Writes are accepted straight
- * away and the graph is rebuilt behind them, so the panel polls the library
- * until the index stamp moves and stays locked until it does.
- *
- * Mounted only while open, so each visit starts from a clean slate.
- */
+/** Manages the CV corpus. Writes are accepted straight away and the graph is
+ *  rebuilt behind them, so the panel polls until the index stamp moves. */
 export function CVLibraryPanel({ library, loadError, onClose, onChange }: Props) {
   const [busy, setBusy] = useState<Busy>(null);
   const [error, setError] = useState<string | null>(null);

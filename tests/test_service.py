@@ -1,8 +1,5 @@
-"""Unit tests for app.service.
-
-The DynamoDB store and the LLM pipeline are exercised manually; these tests cover
-the logic around them: title derivation, turn -> history flattening, and the
-validation an uploaded CV passes before it reaches the store.
+"""Unit tests for app.service: title derivation, turn -> history flattening, and
+the validation an uploaded CV passes before it reaches the store.
 """
 
 import pytest

@@ -5,11 +5,8 @@ STACK := TalentGraphStack
 # Resolved lazily (recursive =) so aws is only called by targets that use it.
 DATA_BUCKET = $(shell aws cloudformation describe-stacks --stack-name $(STACK) \
 	--query "Stacks[0].Outputs[?OutputKey=='DataBucketName'].OutputValue" --output text)
-# Cognito ids come from the deployed stack when there is one, otherwise from
-# backend/.env — which is what lets local development run against a pool created
-# by hand, before the stack has ever been deployed.
-# filter-out None: that is what the CLI prints when the stack exists but has no
-# such output yet, i.e. between the two passes of a clean-slate deploy.
+# Cognito ids: deployed stack first, then backend/.env. filter-out None because
+# that is what the CLI prints for an output the stack does not have yet.
 ENV_FILE := backend/.env
 env_value = $(strip $(shell sed -n 's/^[[:space:]]*$(1)=//p' $(ENV_FILE) 2>/dev/null | tail -1))
 
@@ -21,8 +18,7 @@ STACK_USER_POOL_CLIENT_ID = $(filter-out None,$(shell aws cloudformation describ
 USER_POOL_ID = $(or $(STACK_USER_POOL_ID),$(call env_value,COGNITO_USER_POOL_ID))
 USER_POOL_CLIENT_ID = $(or $(STACK_USER_POOL_CLIENT_ID),$(call env_value,COGNITO_CLIENT_ID))
 
-# Passed to local runs only when the stack is deployed, so an empty value never
-# shadows a COGNITO_USER_POOL_ID set in backend/.env or the shell.
+# Only set when non-empty, so it never shadows backend/.env or the shell.
 COGNITO_ENV = $(if $(USER_POOL_ID),COGNITO_USER_POOL_ID=$(USER_POOL_ID),)
 VITE_COGNITO_ENV = $(if $(USER_POOL_ID),VITE_COGNITO_USER_POOL_ID=$(USER_POOL_ID) \
 	VITE_COGNITO_CLIENT_ID=$(USER_POOL_CLIENT_ID),)
@@ -49,25 +45,21 @@ cvs:
 ingest:
 	cd backend && uv run talentgraph-ingest
 
-# Uses the deployed user pool when there is one, so local runs exercise the real
-# login rather than an ungated shortcut.
 serve:
 	cd backend && $(COGNITO_ENV) uv run uvicorn app.api.server:app --reload --port 8000
 
 chat:
 	cd backend && uv run talentgraph-chat
 
-# Evaluation set (tests/eval/queries.yaml). EVAL_ARGS="--url https://..." to
-# score a deployed instance, or "--markdown ../EVALUATION.md" to write a report.
+# EVAL_ARGS="--url https://..." to score a deployed instance.
 eval:
 	cd backend && uv run python ../scripts/run_eval.py $(EVAL_ARGS)
 
 frontend-dev:
 	cd frontend && $(VITE_COGNITO_ENV) npm run dev
 
-# SPA build for CloudFront: empty VITE_API_BASE = same-origin /chat requests.
-# The Cognito ids come from the deployed stack, so a clean-slate install needs two
-# passes: the first creates the pool, the second builds a SPA that can see it.
+# Empty VITE_API_BASE = same-origin requests behind CloudFront. Needs the pool
+# ids, so a clean-slate install deploys twice.
 frontend-build:
 	cd frontend && VITE_API_BASE="" $(VITE_COGNITO_ENV) npm run build
 
@@ -84,9 +76,8 @@ openai-key:
 deploy: frontend-build
 	cd infrastructure && uv run cdk deploy
 
-# One-off: create the operator account in the pool the stack just made. Prompts,
-# so neither the username nor the password lands in a file or shell history.
-# --permanent is what skips Cognito's force-change-password challenge.
+# Prompts, so no credentials land in a file or shell history. --permanent skips
+# the force-change-password challenge.
 cognito-user:
 	@read -p "Username: " u; \
 	read -s -p "Password: " p; echo; \

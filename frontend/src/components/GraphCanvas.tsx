@@ -33,14 +33,10 @@ const RELATION_LABEL_ZOOM = 0.75;
 /** How far along the edge, away from the focused node, a relation name sits. */
 const RELATION_LABEL_ALONG = 0.62;
 
-/**
- * Canvas rendering of the knowledge graph.
+/** Canvas rendering of the knowledge graph.
  *
- * The simulation and the view transform live in refs rather than state: they
- * change every animation frame, and re-rendering React sixty times a second to
- * move some circles would be the one thing this component must not do. React
- * state here is only what the surrounding DOM shows — the hover tooltip.
- */
+ *  The simulation and the view transform live in refs, not state — they change
+ *  every frame. React state here is only the hover tooltip. */
 export function GraphCanvas({ nodes, edges, selected, matches, onSelect, fitToken }: Props) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const wrapRef = useRef<HTMLDivElement>(null);
@@ -249,9 +245,8 @@ export function GraphCanvas({ nodes, edges, selected, matches, onSelect, fitToke
         ctx.fillText(node.id, sx, sy);
       }
 
-      // Relation names on the focused node's edges. They sit out near the far
-      // end rather than at the midpoint: on a hub like "Python" every midpoint
-      // lands in the same place and the labels become a smudge.
+      // Placed near the far end, not the midpoint: on a hub like "Python" every
+      // midpoint lands in the same place and the labels smudge together.
       if (focusId && view.k > RELATION_LABEL_ZOOM) {
         ctx.font = '9px "IBM Plex Mono", monospace';
         ctx.fillStyle = "rgba(198, 204, 235, 0.85)";

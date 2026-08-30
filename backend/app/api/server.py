@@ -39,9 +39,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Routes reachable without a Cognito access token. Everything else is denied by
-# default, so a new route is protected unless it is added here deliberately.
-# The docs endpoints stay open because they expose the schema, never the data.
+# Everything not listed here is denied without a Cognito access token.
 PUBLIC_PATHS = frozenset({"/health", "/docs", "/redoc", "/openapi.json"})
 
 
@@ -49,8 +47,7 @@ PUBLIC_PATHS = frozenset({"/health", "/docs", "/redoc", "/openapi.json"})
 async def require_access_token(request: Request, call_next):
     """Mirrors the Lambda proxy's gate (infrastructure/proxy/handler.py).
 
-    No-ops entirely unless COGNITO_USER_POOL_ID is set, which keeps local
-    development free of AWS; see backend/app/auth.py.
+    No-ops unless COGNITO_USER_POOL_ID is set.
     """
     # Preflights never carry an Authorization header — rejecting them here
     # would break CORS before the browser ever sends the real request.

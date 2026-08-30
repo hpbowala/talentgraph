@@ -1,7 +1,7 @@
 """Generate the Obsidian vault: Markdown notes with [[Wikilinks]].
 
-The vault IS the knowledge graph. Relation semantics are encoded by note type +
-section heading, which the graph parser (app/graph/parser.py) understands:
+Note type + section heading encode the relation, which app/graph/parser.py
+reads back:
 
   Person note:  ## Skills -> HAS_SKILL, ## Technologies -> USES,
                 ## Domains -> EXPERIENCE_IN, ## Projects -> WORKED_ON,
@@ -9,8 +9,8 @@ section heading, which the graph parser (app/graph/parser.py) understands:
   Project note: ## Technologies -> USES, ## Domains -> IN_DOMAIN
   Skill note:   ## Related Skills -> RELATED_TO
 
-"## People" / "## Projects" sections on non-person notes are backlinks for
-Obsidian navigation only; the parser ignores them to avoid duplicate edges.
+"## People" / "## Projects" on non-person notes are backlinks for Obsidian
+navigation; the parser ignores them.
 """
 
 import json

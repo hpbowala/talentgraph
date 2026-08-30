@@ -1,9 +1,7 @@
 """Rebuild the knowledge graph from the CV corpus.
 
-Called by the /cvs API after an upload or a delete: pull the CVs out of the
-store, run the ingestion pipeline, publish the new vault, and swap the graph
-this process serves from. Serialized with a lock so two concurrent uploads
-cannot interleave two rebuilds of the same vault.
+Called by the /cvs API after an upload or delete. Serialized with a lock so two
+concurrent uploads cannot interleave two rebuilds of the same vault.
 """
 
 import threading

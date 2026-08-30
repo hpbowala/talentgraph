@@ -1,22 +1,16 @@
 """Storage for the CV corpus and the vault it compiles into.
 
-The CVs the assistant answers questions about are managed through the /cvs API
-(list / upload / delete). Two backends, selected by CV_STORE — it defaults to
-VAULT_SOURCE so a deployed runtime keeps the corpus in S3 while local
-development uses the checked-in sample CVs:
+Two backends, selected by CV_STORE (defaults to VAULT_SOURCE):
 
 - "s3":    s3://$VAULT_BUCKET/{cvs,vault,profiles}/   (deployed default)
 - "local": data/sample_cvs/ + vault/ on disk          (development)
 
-Bucket layout:
     cvs/<filename>            uploaded CV documents — the source of truth
     vault/<Type>/<Note>.md    generated knowledge-graph notes
     vault/.index.json         manifest: build stamp + person -> CV filename
     profiles/<sha256>.json    cached LLM extraction, keyed by CV file content
 
-The manifest doubles as a cache-invalidation stamp: every runtime instance
-compares it before serving a question, so a CV uploaded through one instance is
-picked up by the others (see app/service.py).
+The manifest stamp is also how instances notice another one's upload.
 """
 
 import hashlib
@@ -236,10 +230,8 @@ class ProfileCache:
 def checkout() -> Iterator[tuple[Path, Path]]:
     """Yield (cv_dir, vault_dir) for a rebuild.
 
-    The vault is always built in a scratch directory and only becomes live in
-    publish_vault(), so a run that fails halfway leaves the current graph intact.
-    CVs are read where they live: the local corpus directly, the S3 corpus via a
-    download into the workspace.
+    Built in a scratch directory and only made live by publish_vault(), so a
+    half-failed run leaves the current graph intact.
     """
     workspace = Path(tempfile.mkdtemp(prefix="talentgraph-build-"))
     try:
@@ -287,8 +279,7 @@ def write_manifest(vault_dir: Path, sources: dict[str, str]) -> str:
 def publish_vault(vault_dir: Path, sources: dict[str, str]) -> str:
     """Make the freshly built vault the live one and return its new stamp.
 
-    Writes the manifest last so a reader either sees the previous index or the
-    complete new one.
+    Manifest written last, so a reader sees either the old index or the new.
     """
     if backend() == "local":
         return _publish_local(vault_dir, sources)

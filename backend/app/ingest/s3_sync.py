@@ -1,7 +1,6 @@
 """Upload source CVs, their cached extractions and the generated vault to S3.
 
-Shipping profiles/ matters: without it the first CV uploaded through the app
-would re-extract the whole corpus before it could answer anything.
+profiles/ goes too, or the first upload re-extracts the whole corpus.
 """
 
 import os

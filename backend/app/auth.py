@@ -1,25 +1,16 @@
 """Cognito access-token verification, shared by both API adapters.
 
-Auth is enabled by configuration rather than by a flag: with COGNITO_USER_POOL_ID
-unset — the local default — every request is allowed through, so `make serve`
-still needs no AWS account. The deployed stack always sets it, so the public
-CloudFront URL is always gated.
-
-Tokens are checked by handing them to Cognito's GetUser API rather than by
-verifying the JWT signature locally. That needs no crypto dependency and no JWKS
-cache, which matters because the Lambda proxy ships as a plain asset directory
-with no bundling step; at single-operator scale the extra round trip is not
-worth a build pipeline to avoid.
+With COGNITO_USER_POOL_ID unset — the local default — every request is allowed
+through. Tokens are checked via Cognito's GetUser rather than by verifying the
+JWT locally, which keeps the Lambda proxy free of a bundling step.
 """
 
 import os
 
 from dotenv import load_dotenv
 
-# Loaded here, not just in app.llm.provider: this module is imported before it
-# (see app/api/server.py), so without this the pool id in backend/.env would be
-# read before the file had been parsed — and the gate would silently stay open.
-# Existing environment variables win, so the Makefile and the shell still override.
+# Imported before app.llm.provider, so the pool id would otherwise be read
+# before backend/.env was parsed and the gate would silently stay open.
 load_dotenv()
 
 USER_POOL_ID = os.getenv("COGNITO_USER_POOL_ID", "")
@@ -57,8 +48,7 @@ def bearer_token(header: str | None) -> str:
 def verify_access_token(token: str) -> str:
     """Return the username the token belongs to, or raise AuthError.
 
-    Cognito rejects expired, tampered and revoked tokens itself, so there is no
-    signature, issuer or expiry check to duplicate here.
+    Cognito rejects expired, tampered and revoked tokens itself.
     """
     from botocore.exceptions import ClientError  # noqa: PLC0415
 

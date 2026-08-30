@@ -21,10 +21,8 @@ export function RedirectIfSignedIn({ children }: { children: React.ReactNode }) 
   return <>{children}</>;
 }
 
-/** Wraps the login route. As well as the signed-in case, this covers a URL that
- *  was typed or bookmarked when no user pool is configured: rendering the form
- *  there would only fail on submit with "Authentication is not configured", so
- *  send the visitor to the app instead, which is open in that configuration. */
+/** Wraps the login route. Redirects when signed in, and when no user pool is
+ *  configured — the form would only fail on submit, and the app is open. */
 export function LoginRoute({ children }: { children: React.ReactNode }) {
   const { status, required } = useSession();
   if (!required) return <Navigate to="/app" replace />;

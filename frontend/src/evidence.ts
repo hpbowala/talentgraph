@@ -1,7 +1,6 @@
-/** Evidence strings arrive from the backend already formatted as graph walks —
- *  "Alice Perera —HAS_SKILL→ Python", chained for multi-hop paths (see
- *  backend/app/graph/retriever.py). Splitting them back apart lets the note
- *  names become links into the graph explorer. */
+/** Evidence arrives as graph walks — "Alice Perera —HAS_SKILL→ Python", chained
+ *  for multi-hop paths. Split apart so the note names can link into the
+ *  explorer. */
 
 export interface EvidenceSegment {
   text: string;
