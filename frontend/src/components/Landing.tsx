@@ -45,9 +45,14 @@ export function Landing() {
 
       <header className="landing-bar">
         <Brand />
-        <button className="landing-cta ghost" onClick={onEnter}>
-          {ctaLabel}
-        </button>
+        <nav className="landing-nav">
+          <button className="landing-link" onClick={() => navigate("/architecture")}>
+            Architecture
+          </button>
+          <button className="landing-cta ghost" onClick={onEnter}>
+            {ctaLabel}
+          </button>
+        </nav>
       </header>
 
       <main className="landing-main">
@@ -59,9 +64,17 @@ export function Landing() {
             people, skills, projects and technologies — then answers questions about it in
             plain English.
           </p>
-          <button className="landing-cta spot" onClick={onEnter} onMouseMove={trackSpotlight}>
-            {ctaLabel}
-          </button>
+          <div className="landing-ctas">
+            <button className="landing-cta spot" onClick={onEnter} onMouseMove={trackSpotlight}>
+              {ctaLabel}
+            </button>
+            <button
+              className="landing-cta ghost"
+              onClick={() => navigate("/architecture")}
+            >
+              Explore the architecture
+            </button>
+          </div>
         </section>
 
         <section className="landing-grid">

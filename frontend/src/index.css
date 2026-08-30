@@ -366,9 +366,11 @@ body::after {
   gap: 8px;
 }
 
-/* secondary button — the corpus behind the answers */
-.cv-library-open {
+/* secondary buttons — the corpus behind the answers, and how the app is built */
+.cv-library-open,
+.arch-open {
   display: flex;
+  text-decoration: none;
   align-items: center;
   gap: 9px;
   font-family: var(--font-sans);
@@ -384,7 +386,8 @@ body::after {
     border-color 200ms var(--ease-expo);
 }
 
-.cv-library-open:hover {
+.cv-library-open:hover,
+.arch-open:hover {
   color: var(--fg);
   background: var(--surface-hover);
   border-color: var(--border-hover);
@@ -2389,4 +2392,526 @@ body::after {
 
 .login-back:hover:not(:disabled) {
   color: var(--fg);
+}
+
+/* ---- landing: secondary entry points ---------------------------------- */
+
+.landing-nav {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* Quiet nav item — it sits beside the sign-in CTA and must not compete. */
+.landing-link {
+  font-family: var(--font-sans);
+  font-size: 0.85rem;
+  color: var(--fg-muted);
+  background: none;
+  border: none;
+  border-radius: 8px;
+  padding: 9px 12px;
+  cursor: pointer;
+  transition: color 200ms var(--ease-expo);
+}
+
+.landing-link:hover {
+  color: var(--fg);
+}
+
+.landing-ctas {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  margin-top: 8px;
+}
+
+.landing-ctas .landing-cta {
+  margin-top: 0;
+}
+
+.landing-ctas .landing-cta.ghost {
+  padding: 13px 22px;
+}
+
+/* ---- architecture page ------------------------------------------------ */
+
+.arch {
+  /* Diagram roles. The request path takes the app accent; everything else is
+     deliberately quieter so the traced route stays the loudest thing drawn. */
+  --arch-flow: var(--accent-bright);
+  --arch-data: var(--fg-muted);
+  --arch-async: #45c39a;
+  --arch-ext: #d9a05e;
+  --arch-node-fill: rgba(255, 255, 255, 0.03);
+  --arch-node-line: var(--border-hover);
+  --arch-sub: var(--fg-muted);
+
+  position: relative;
+  z-index: 1;
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+  padding: 28px clamp(20px, 6vw, 72px) 40px;
+}
+
+.arch-main {
+  flex: 1;
+  width: 100%;
+  max-width: 1140px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: clamp(44px, 7vh, 72px);
+  padding-top: clamp(24px, 6vh, 56px);
+}
+
+.arch-hero {
+  max-width: 720px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 16px;
+}
+
+.arch-overline {
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--accent-bright);
+}
+
+.arch-hero h2 {
+  font-size: clamp(1.8rem, 4.2vw, 2.6rem);
+  font-weight: 600;
+  line-height: 1.12;
+  letter-spacing: -0.03em;
+}
+
+.arch-lede {
+  font-size: 1rem;
+  color: var(--fg-muted);
+  max-width: 62ch;
+}
+
+.arch-facts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  list-style: none;
+  margin-top: 4px;
+}
+
+.arch-facts li {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  color: var(--fg-muted);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 6px 13px;
+}
+
+.arch-facts b {
+  color: var(--fg);
+  font-weight: 500;
+}
+
+.arch-section {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.arch-section h3 {
+  font-size: 1.22rem;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+
+.arch-note {
+  font-size: 0.9rem;
+  color: var(--fg-muted);
+  max-width: 68ch;
+  margin-top: -6px;
+}
+
+/* ---- figures ---- */
+
+.arch-figure {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 20px;
+  background: rgba(10, 10, 12, 0.55);
+  backdrop-filter: blur(14px);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  box-shadow: var(--shadow-card);
+}
+
+.arch-figure figcaption {
+  font-size: 0.82rem;
+  line-height: 1.6;
+  color: var(--fg-muted);
+  max-width: 82ch;
+  padding-top: 12px;
+  border-top: 1px solid var(--border);
+}
+
+/* Diagrams have a floor below which the labels stop being readable, so they
+   scroll sideways in their own box rather than shrinking with the viewport. */
+.arch-canvas {
+  overflow-x: auto;
+}
+
+.arch-svg {
+  display: block;
+  width: 100%;
+  min-width: 900px;
+  height: auto;
+}
+
+.arch-node rect {
+  fill: var(--arch-node-fill);
+  stroke: var(--arch-node-line);
+}
+
+.arch-node.lit rect {
+  stroke: var(--arch-flow);
+  stroke-width: 1.6;
+}
+
+.arch-eyebrow {
+  font-size: 10px;
+  letter-spacing: 1.3px;
+  fill: var(--fg-muted);
+}
+
+.arch-eyebrow.on {
+  fill: var(--arch-flow);
+}
+
+.arch-title {
+  font-family: var(--font-sans);
+  font-size: 15px;
+  font-weight: 600;
+  fill: var(--fg);
+}
+
+.arch-sub {
+  font-size: 11px;
+  fill: var(--arch-sub);
+}
+
+.arch-badge circle {
+  fill: var(--arch-flow);
+}
+
+.arch-badge text {
+  fill: #fff;
+}
+
+.arch-badge.async circle {
+  fill: var(--arch-async);
+}
+
+.arch-badge.async text {
+  fill: var(--bg-deep);
+}
+
+/* ---- tracing one hop ---- */
+
+.arch-hop,
+.arch-badge,
+.arch-data-lines,
+.arch-aux {
+  transition: opacity 200ms var(--ease-expo);
+}
+
+.arch-svg.spotlit .arch-hop,
+.arch-svg.spotlit .arch-badge,
+.arch-svg.spotlit .arch-data-lines,
+.arch-svg.spotlit .arch-aux {
+  opacity: 0.22;
+}
+
+.arch-svg.spotlit .arch-hop.on,
+.arch-svg.spotlit .arch-badge.on {
+  opacity: 1;
+}
+
+.arch-hop.on {
+  stroke-width: 3;
+}
+
+.arch-badge {
+  cursor: pointer;
+}
+
+.arch-badge.on circle {
+  r: 13;
+}
+
+/* ---- the numbered walk-through ---- */
+
+.arch-hops {
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(330px, 1fr));
+  gap: 8px;
+  counter-reset: none;
+}
+
+.arch-hop-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  width: 100%;
+  height: 100%;
+  text-align: left;
+  font: inherit;
+  font-size: 0.86rem;
+  line-height: 1.55;
+  color: var(--fg-muted);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 14px 16px;
+  cursor: pointer;
+  transition: color 200ms var(--ease-expo), background 200ms var(--ease-expo),
+    border-color 200ms var(--ease-expo);
+}
+
+.arch-hop-item:hover,
+.arch-hop-item.on {
+  color: var(--fg);
+  background: var(--surface-hover);
+  border-color: var(--border-accent);
+}
+
+.arch-hop-item b {
+  display: block;
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: var(--fg);
+  margin-bottom: 2px;
+}
+
+.arch-hop-n {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 22px;
+  height: 22px;
+  margin-top: 1px;
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  color: #fff;
+  background: var(--accent);
+  border-radius: 50%;
+}
+
+/* ---- legend ---- */
+
+.arch-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 22px;
+  list-style: none;
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  color: var(--fg-muted);
+}
+
+.arch-legend li {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.arch-legend i {
+  display: block;
+  width: 24px;
+  border-top: 2px solid currentColor;
+}
+
+.arch-legend .k-flow {
+  color: var(--arch-flow);
+}
+
+.arch-legend .k-data {
+  color: var(--arch-data);
+  border-top-width: 1.5px;
+}
+
+.arch-legend .k-async {
+  color: var(--arch-async);
+  border-top-style: dashed;
+}
+
+.arch-legend .k-ext {
+  color: var(--arch-ext);
+}
+
+.arch-legend .k-bound {
+  color: var(--arch-data);
+  border-top-style: dashed;
+  border-top-width: 1.5px;
+}
+
+/* ---- services table ---- */
+
+.arch-table-wrap {
+  overflow-x: auto;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: rgba(10, 10, 12, 0.55);
+}
+
+.arch-table {
+  border-collapse: collapse;
+  width: 100%;
+  min-width: 760px;
+}
+
+.arch-table th,
+.arch-table td {
+  text-align: left;
+  vertical-align: top;
+  padding: 13px 18px;
+  border-bottom: 1px solid var(--border);
+}
+
+.arch-table thead th {
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--accent-bright);
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.arch-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.arch-table td {
+  font-size: 0.85rem;
+  line-height: 1.55;
+  color: var(--fg-muted);
+}
+
+.arch-table .arch-svc {
+  white-space: nowrap;
+  font-size: 0.86rem;
+  font-weight: 600;
+  color: var(--fg);
+}
+
+.arch-table .arch-svc span {
+  display: block;
+  margin-top: 3px;
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  font-weight: 400;
+  letter-spacing: 0.04em;
+  color: var(--fg-muted);
+  white-space: normal;
+}
+
+.arch-table .arch-why {
+  color: var(--fg-subtle);
+}
+
+/* ---- omissions + operations ---- */
+
+.arch-omitted {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.arch-omitted li {
+  padding: 16px 0;
+  border-bottom: 1px solid var(--border);
+  max-width: 78ch;
+}
+
+.arch-omitted li:last-child {
+  border-bottom: none;
+}
+
+.arch-omitted b {
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.arch-omitted p {
+  font-size: 0.86rem;
+  line-height: 1.6;
+  color: var(--fg-muted);
+  margin: 4px 0 8px;
+}
+
+.arch-trigger {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.04em;
+  color: var(--accent-bright);
+  background: rgba(94, 106, 210, 0.1);
+  border: 1px solid var(--border-accent);
+  border-radius: 999px;
+  padding: 4px 11px;
+}
+
+.arch-ops {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 14px;
+}
+
+.arch-ops article {
+  padding: 20px;
+  background: rgba(10, 10, 12, 0.55);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+}
+
+.arch-ops h4 {
+  font-size: 0.9rem;
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+
+.arch-ops p {
+  font-size: 0.84rem;
+  line-height: 1.6;
+  color: var(--fg-muted);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .arch-hop,
+  .arch-badge,
+  .arch-data-lines,
+  .arch-aux,
+  .arch-hop-item {
+    transition: none;
+  }
+}
+
+@media (max-width: 700px) {
+  .arch {
+    padding: 22px 16px 32px;
+  }
+
+  .arch-figure {
+    padding: 12px;
+  }
 }

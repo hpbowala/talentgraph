@@ -1,4 +1,5 @@
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
+import { Architecture } from "./components/Architecture";
 import { Chat } from "./components/Chat";
 import { Landing } from "./components/Landing";
 import { Login } from "./components/Login";
@@ -39,6 +40,9 @@ export default function App() {
               </RequireAuth>
             }
           />
+          {/* Documentation, not data: no guard, so it reads the same signed in
+              or out and can be linked to from the public landing page. */}
+          <Route path="/architecture" element={<Architecture />} />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </SessionProvider>

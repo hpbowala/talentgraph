@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import { relativeTime } from "../format";
 import type { ConversationSummary } from "../types";
 
@@ -106,6 +107,17 @@ export function Sidebar({
           CV library
           <span className="cv-library-count">{cvCount}</span>
         </button>
+        <Link className="arch-open" to="/architecture">
+          <svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+            <path
+              d="M2.5 3.5h4v3h-4v-3zM9.5 9.5h4v3h-4v-3zM2.5 9.5h4v3h-4v-3zM6.5 5h3v6"
+              stroke="currentColor"
+              strokeWidth="1.3"
+              strokeLinejoin="round"
+            />
+          </svg>
+          Architecture
+        </Link>
       </div>
 
       <div className="threads-section">

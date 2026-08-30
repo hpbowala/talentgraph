@@ -213,6 +213,7 @@ Guards live in `components/RouteGuards.tsx` and read the session shared by
 | `/` | Landing | Redirects to `/app` when already signed in |
 | `/login` | Sign-in form | Redirects to `/app` if signed in, or if no pool is configured |
 | `/app` | Chat | **Requires a session** — otherwise redirects to `/login`, remembering the target so sign-in resumes it |
+| `/architecture` | Architecture | None — it describes the system rather than reading from it, so it renders the same signed in or out |
 | anything else | — | Redirects to `/` |
 
 `/app` rather than `/chat` is deliberate: CloudFront routes `/chat`,
