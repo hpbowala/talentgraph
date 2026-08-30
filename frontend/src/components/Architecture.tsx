@@ -132,34 +132,6 @@ const SERVICES = [
   },
 ];
 
-const OMITTED = [
-  {
-    name: "Amazon API Gateway",
-    body: "CloudFront plus a Lambda Function URL already gives one TLS origin, path routing and a place to authorise.",
-    trigger: "per-client rate limits or API keys",
-  },
-  {
-    name: "OpenSearch or a vector store",
-    body: "Retrieval here is exact set intersection over typed edges. Embeddings would be merely close where traversal is correct, and could not produce the path that makes an answer explainable.",
-    trigger: "free-text questions the graph schema cannot express",
-  },
-  {
-    name: "Amazon Neptune or an RDS schema",
-    body: "The Markdown vault is the source of truth precisely because it is human-readable and version-controlled. A database would hide the artefact the project is about.",
-    trigger: "a corpus that no longer fits in a container's memory",
-  },
-  {
-    name: "Amazon ECS or EKS",
-    body: "AgentCore already runs the container, scales to zero and bills per invocation. A cluster would be always-on cost for the same image.",
-    trigger: "sustained concurrent load, or a region without AgentCore",
-  },
-  {
-    name: "Cognito Hosted UI",
-    body: "SRP from the SPA keeps sign-in inside the app's own routing and design, with no redirect round-trip.",
-    trigger: "federated or social identity providers",
-  },
-];
-
 const OPERATIONS = [
   {
     title: "Cold start",
@@ -342,19 +314,6 @@ export function Architecture() {
           </div>
         </section>
 
-        <section className="arch-section">
-          <h3>Deliberately not used</h3>
-          <p className="arch-note">Each omission has a trigger that would bring it back.</p>
-          <ul className="arch-omitted">
-            {OMITTED.map((o) => (
-              <li key={o.name}>
-                <b>{o.name}</b>
-                <p>{o.body}</p>
-                <span className="arch-trigger">Trigger — {o.trigger}</span>
-              </li>
-            ))}
-          </ul>
-        </section>
 
         <section className="arch-section">
           <h3>Operational characteristics</h3>

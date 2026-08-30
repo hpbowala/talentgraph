@@ -2829,47 +2829,7 @@ body::after {
   color: var(--fg-subtle);
 }
 
-/* ---- omissions + operations ---- */
-
-.arch-omitted {
-  list-style: none;
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-}
-
-.arch-omitted li {
-  padding: 16px 0;
-  border-bottom: 1px solid var(--border);
-  max-width: 78ch;
-}
-
-.arch-omitted li:last-child {
-  border-bottom: none;
-}
-
-.arch-omitted b {
-  font-size: 0.9rem;
-  font-weight: 600;
-}
-
-.arch-omitted p {
-  font-size: 0.86rem;
-  line-height: 1.6;
-  color: var(--fg-muted);
-  margin: 4px 0 8px;
-}
-
-.arch-trigger {
-  font-family: var(--font-mono);
-  font-size: 0.68rem;
-  letter-spacing: 0.04em;
-  color: var(--accent-bright);
-  background: rgba(94, 106, 210, 0.1);
-  border: 1px solid var(--border-accent);
-  border-radius: 999px;
-  padding: 4px 11px;
-}
+/* ---- operations ---- */
 
 .arch-ops {
   display: grid;
